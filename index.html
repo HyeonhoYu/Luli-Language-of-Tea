@@ -105,6 +105,9 @@ h1,h2,h3,p{margin:0}
 .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;background:rgba(15,26,23,.78);padding:8px 10px;border-radius:999px;z-index:5}
 .nav button{background:transparent;color:#E7EFE8;border:none;font:600 16px "Noto Sans",sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
 .nav button:hover{background:rgba(255,255,255,.12)}
+.nav #home{background:#D8961C;color:#1B2623}
+.nav #home:hover{background:#E9AC3A}
+.nav #home[hidden]{display:none}
 .nav .count{color:#B9CCC3;font:14px "Noto Sans",sans-serif;min-width:64px;text-align:center}
 .loading{position:absolute;left:0;right:0;top:48%;text-align:center;color:var(--soft);font-size:22px;font-family:"Noto Sans",sans-serif;pointer-events:none}
 @media (prefers-reduced-motion: reduce){ .btn{transition:none} }
@@ -113,6 +116,7 @@ h1,h2,h3,p{margin:0}
 <body>
 <div class="viewport"><div class="deck" id="deck"></div></div>
 <nav class="nav" aria-label="Slide navigation">
+  <button id="home" aria-label="Back to all cups (slide 2)" hidden>All cups</button>
   <button id="prev" aria-label="Previous slide">Back</button>
   <span class="count" id="count">1 / 1</span>
   <button id="next" aria-label="Next slide">Next</button>
@@ -242,10 +246,12 @@ function go(n){
   n = Math.max(0, Math.min(slides.length-1, n));
   slides[cur].classList.remove('active'); cur = n; slides[cur].classList.add('active');
   document.getElementById('count').textContent = (cur+1)+' / '+slides.length;
+  document.getElementById('home').hidden = cur < 2;
   if (typeof onSlide3D === 'function') onSlide3D();
 }
 document.getElementById('prev').onclick=()=>go(cur-1);
 document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('home').onclick=()=>go(1);
 document.addEventListener('keydown', e=>{
   if (e.key==='ArrowRight'||e.key==='PageDown'||(e.key===' '&&e.target===document.body)){ e.preventDefault(); go(cur+1); }
   if (e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(cur-1); }
